@@ -40,7 +40,7 @@ export default function NavBar() {
           />
         </div>
         <Button variant="subtle">
-          <a href="#">Github Repo</a>
+          <a href="https://github.com/NeilMisra99/doi-search">Github Repo</a>
         </Button>
       </Container>
     </Header>
