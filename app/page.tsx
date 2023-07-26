@@ -1,95 +1,71 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { Paper, Grid, Container, Text } from "@mantine/core";
+import { useInputState } from "@mantine/hooks";
+import { SearchWork } from "./components/SearchWork";
+import { DisplayParagraph } from "./components/DisplayParagraph";
+import NavBar from "./components/NavBar";
 
 export default function Home() {
+  const [work, setWork] = useInputState(""); //Used to store the de-compressed abstract string
+  let query: string;
+
+  //Submit function to search through OpenAlex API for respective Work
+  async function handleSubmit() {
+    let obj;
+
+    const res = await fetch(`https://api.openalex.org/works/${query}`);
+    obj = await res.json();
+
+    //Working with the Work object i.e. "obj", to de-compress and generate string
+    let arr: string[] = [];
+    for (let word in obj.abstract_inverted_index) {
+      obj.abstract_inverted_index[word].forEach((index: number) => {
+        arr[index] = word;
+      });
+    }
+    //Joining the array values together
+    let sentence = arr.join(" ");
+    setWork(sentence);
+  }
+
+  //Primarily used to collect user inputted URL from child component - SearchWork
+  function returnQuery(childData: string) {
+    query = childData;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    <div>
+      <NavBar />
+      <Container>
+        <Grid gutter="md" justify="center">
+          <Grid.Col span={12} md={8} lg={6}>
+            <Text
+              align="center"
+              c="blue"
+              fz="xl"
+              fw={600}
+              style={{ marginBottom: "20px" }}
+            >
+              DOI Search Tool Powered By OpenAlex
+            </Text>
+            <Paper p="md" shadow="xs">
+              <SearchWork handleSubmit={handleSubmit} returnQ={returnQuery} />
+            </Paper>
+          </Grid.Col>
+        </Grid>
+      </Container>
+      {work.length > 0 && (
+        <Container fluid style={{ marginTop: "20px" }}>
+          <Grid gutter="md" justify="center">
+            <Grid.Col span={12} md={8} lg={6}>
+              <Paper p="md" shadow="xs">
+                <DisplayParagraph finalParagraph={work} />
+              </Paper>
+            </Grid.Col>
+          </Grid>
+        </Container>
+      )}
+    </div>
+  );
 }
