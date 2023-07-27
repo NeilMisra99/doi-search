@@ -1,6 +1,5 @@
 "use client";
 
-import { Paper, Grid, Container, Text } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { SearchWork } from "./components/SearchWork";
 import DisplayParagraph from "./components/DisplayParagraph";
