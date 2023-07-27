@@ -73,7 +73,7 @@ export default function Home() {
         <Container fluid style={{ marginTop: "20px" }}>
           <Grid gutter="md" justify="center">
             <Grid.Col span={12} md={8} lg={6}>
-              <Paper p="md" shadow="xs">
+              <Paper p="md" shadow="xs" mb={30}>
                 <DisplayParagraph
                   finalParagraph={work.paragraph}
                   finalTitle={work.title}
