@@ -20,6 +20,7 @@ export default function DisplayParagraph(props: {
       </Text>
       <Text fz="xl">{props.finalTitle}</Text>
       <Text> by {props.finalAuthors.join(", ")}</Text>
+      <br></br>
       <Text fz="xl" fw={200}>
         {props.finalParagraph}
       </Text>
