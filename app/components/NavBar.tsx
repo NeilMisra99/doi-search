@@ -11,7 +11,7 @@ const HEADER_HEIGHT = rem(60);
 
 const useStyles = createStyles(() => ({
   root: {
-    position: "relative",
+    position: "sticky",
     zIndex: 1,
   },
 
