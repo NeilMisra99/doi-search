@@ -32,14 +32,14 @@ export default function NavBar() {
       <Container className={classes.header}>
         <div>
           <Image
-            src="https://cdn-icons-png.flaticon.com/512/3487/3487190.png"
-            height={40}
+            src="https://i.ibb.co/C7WtTNy/pngwing-com.png"
+            height={30}
             alt="Logo"
             fit="contain"
             width={80}
           />
         </div>
-        <Button variant="subtle">
+        <Button variant="subtle" size="md">
           <a href="https://github.com/NeilMisra99/doi-search">Github Repo</a>
         </Button>
       </Container>
