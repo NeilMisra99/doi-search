@@ -8,14 +8,6 @@ export function SearchWork(props: {
 }) {
   const [query, setQuery] = useInputState(""); //State tracking query input
 
-  function validateQuery() {
-    if (query.startsWith("https://doi.org/") || query.startsWith("doi:")) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
   props.returnQ(query); //Returning input to parent component
   return (
     <Grid gutter="md" style={{ marginBottom: "20px", marginTop: "20px" }}>
@@ -30,10 +22,7 @@ export function SearchWork(props: {
       </Grid.Col>
       <Grid.Col span={12}>
         <Center>
-          <Button
-            onClick={props.handleSubmit}
-            disabled={query.length == 0 || validateQuery() === true}
-          >
+          <Button onClick={props.handleSubmit} disabled={query.length == 0}>
             Submit
           </Button>
         </Center>
