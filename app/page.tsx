@@ -51,38 +51,13 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <Container>
-        <Grid gutter="md" justify="center">
-          <Grid.Col span={12} md={8} lg={6}>
-            <Text
-              align="center"
-              c="blue"
-              fz="xl"
-              fw={600}
-              style={{ marginBottom: "20px" }}
-            >
-              DOI Search Tool Powered By OpenAlex
-            </Text>
-            <Paper p="md" shadow="xs">
-              <SearchWork handleSubmit={handleSubmit} returnQ={returnQuery} />
-            </Paper>
-          </Grid.Col>
-        </Grid>
-      </Container>
+      <SearchWork handleSubmit={handleSubmit} returnQ={returnQuery} />
       {work.paragraph.length > 0 && (
-        <Container fluid style={{ marginTop: "20px" }}>
-          <Grid gutter="md" justify="center">
-            <Grid.Col span={12} md={8} lg={6}>
-              <Paper p="md" shadow="xs" mb={30}>
-                <DisplayParagraph
-                  finalParagraph={work.paragraph}
-                  finalTitle={work.title}
-                  finalAuthors={work.authors}
-                />
-              </Paper>
-            </Grid.Col>
-          </Grid>
-        </Container>
+        <DisplayParagraph
+          finalParagraph={work.paragraph}
+          finalTitle={work.title}
+          finalAuthors={work.authors}
+        />
       )}
     </div>
   );
