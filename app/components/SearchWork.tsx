@@ -7,8 +7,16 @@ export function SearchWork(props: {
   handleSubmit: MouseEventHandler<HTMLButtonElement> | undefined; //calling function in parent component to handle API call
 }) {
   const [query, setQuery] = useInputState(""); //State tracking query input
-  props.returnQ(query); //Returning input to parent component
 
+  function validateQuery() {
+    if (query.startsWith("https://doi.org/") || query.startsWith("doi:")) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  props.returnQ(query); //Returning input to parent component
   return (
     <Grid gutter="md" style={{ marginBottom: "20px", marginTop: "20px" }}>
       <Grid.Col span={12}>
@@ -22,7 +30,10 @@ export function SearchWork(props: {
       </Grid.Col>
       <Grid.Col span={12}>
         <Center>
-          <Button onClick={props.handleSubmit} disabled={query.length == 0}>
+          <Button
+            onClick={props.handleSubmit}
+            disabled={query.length == 0 || validateQuery() === true}
+          >
             Submit
           </Button>
         </Center>
