@@ -17,6 +17,9 @@ export default function Home() {
   //Submit function to search through OpenAlex API for respective Work
   async function handleSubmit() {
     const res = await fetch(`https://api.openalex.org/works/${query}`);
+    if (!res.ok) {
+      alert("Error occured. Please recheck your link");
+    }
     const obj = await res.json();
 
     //Working with the Work object i.e. "obj", to de-compress and generate string
