@@ -3,30 +3,41 @@
 import { Paper, Grid, Container, Text } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { SearchWork } from "./components/SearchWork";
-import { DisplayParagraph } from "./components/DisplayParagraph";
+import DisplayParagraph from "./components/DisplayParagraph";
 import NavBar from "./components/NavBar";
 
 export default function Home() {
-  const [work, setWork] = useInputState(""); //Used to store the de-compressed abstract string
-  let query: string;
+  const [work, setWork] = useInputState({
+    paragraph: "",
+    title: "",
+    authors: [""],
+  });
+  let query: string = "";
 
   //Submit function to search through OpenAlex API for respective Work
   async function handleSubmit() {
-    let obj;
-
     const res = await fetch(`https://api.openalex.org/works/${query}`);
-    obj = await res.json();
+    const obj = await res.json();
 
     //Working with the Work object i.e. "obj", to de-compress and generate string
-    let arr: string[] = [];
+    const arr: (string | undefined)[] = [];
+    const authorsArray: string[] = [];
+
+    //Decompressing
     for (let word in obj.abstract_inverted_index) {
       obj.abstract_inverted_index[word].forEach((index: number) => {
         arr[index] = word;
       });
     }
-    //Joining the array values together
+    //Finding author names
+    for (let authorship in obj.authorships) {
+      authorsArray.push(obj.authorships[authorship].author.display_name);
+    }
+
+    //Joining the decompressed values together
     let sentence = arr.join(" ");
-    setWork(sentence);
+
+    setWork({ paragraph: sentence, title: obj.title, authors: authorsArray });
   }
 
   //Primarily used to collect user inputted URL from child component - SearchWork
@@ -55,12 +66,16 @@ export default function Home() {
           </Grid.Col>
         </Grid>
       </Container>
-      {work.length > 0 && (
+      {work.paragraph.length > 0 && (
         <Container fluid style={{ marginTop: "20px" }}>
           <Grid gutter="md" justify="center">
             <Grid.Col span={12} md={8} lg={6}>
               <Paper p="md" shadow="xs">
-                <DisplayParagraph finalParagraph={work} />
+                <DisplayParagraph
+                  finalParagraph={work.paragraph}
+                  finalTitle={work.title}
+                  finalAuthors={work.authors}
+                />
               </Paper>
             </Grid.Col>
           </Grid>
